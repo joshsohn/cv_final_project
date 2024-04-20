@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from configs.config_v1 import ConfigV1 as Config
 from network.network_utils import build_model
 from network.optimizer_utils import get_optimizer, get_scheduler
-from dataloaders import morph
+from dataloaders import morph, utk
 from utils.util import load_model, save_model, extract_features, find_kNN, select_pair_geometric_random, get_absolute_score, get_results, get_age_bounds
 
 
@@ -31,6 +31,15 @@ def main(cfg):
         train_dataset = morph.MorphTrain(cfg=cfg, tau=cfg.tau, dataset_dir=cfg.dataset_root)
         test_ref_dataset = morph.MorphRefSampling(cfg=cfg, tau=cfg.tau, dataset_dir=cfg.dataset_root)
         test_dataset = morph.MorphTest(cfg=cfg, dataset_dir=cfg.dataset_root)
+
+        test_ref_loader = DataLoader(test_ref_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True)
+        test_loader = DataLoader(test_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True)
+    
+    elif cfg.dataset_name == 'utk':
+
+        train_dataset = utk.UTKTrain(cfg=cfg, tau=cfg.tau, dataset_dir=cfg.dataset_root)
+        test_ref_dataset = utk.UTKRefSampling(cfg=cfg, tau=cfg.tau, dataset_dir=cfg.dataset_root)
+        test_dataset = utk.UTKTest(cfg=cfg, dataset_dir=cfg.dataset_root)
 
         test_ref_loader = DataLoader(test_ref_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True)
         test_loader = DataLoader(test_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True)

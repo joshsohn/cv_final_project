@@ -80,8 +80,8 @@ def data_select(cfg):
 
         sep = [' ', ',', ',', ',', ',']
 
-        train_data = pd.read_csv(os.path.join(cfg.dataset_root, 'datalist/morph/RS_partial/Setting_1_fold%d_train.txt' % cfg.fold), sep=sep[cfg.fold])
-        test_data = pd.read_csv(os.path.join(cfg.dataset_root, 'datalist/morph/RS_partial/Setting_1_fold%d_test.txt' % cfg.fold), sep=sep[cfg.fold])
+        train_data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/RS_partial/Setting_1_fold%d_train.txt' % cfg.fold), sep=sep[cfg.fold])
+        test_data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/RS_partial/Setting_1_fold%d_test.txt' % cfg.fold), sep=sep[cfg.fold])
 
         age_min, age_max = train_data['age'].min(), train_data['age'].max()
 
@@ -108,7 +108,7 @@ def data_select(cfg):
 
     elif (cfg.dataset_name == 'morph') & (cfg.training_scheme == 'SE'):
 
-        data = pd.read_csv(os.path.join(cfg.dataset_root, 'datalist/morph/SE/Setting_4.txt'), sep='\t')
+        data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/SE/Setting_4.txt'), sep='\t')
         train_data = data[data['fold'] != cfg.fold].reset_index(drop=True)
         test_data = data[data['fold'] == cfg.fold].reset_index(drop=True)
 

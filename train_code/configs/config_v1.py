@@ -10,10 +10,10 @@ def write_log(log_file, out_str):
 
 class ConfigV1:
     def __init__(self):
-
+        
         # dataset
-        self.dataset_name = 'morph'
-        self.dataset_root = f'/hdd1/Dataset/AgeEstimation/'
+        self.dataset_name = 'utk' 
+        self.dataset_root = f'datalist' # TODO: change to wherever downloaded dataset is located
         self.training_scheme = 'RS_partial'
         self.fold = 0
 
@@ -51,7 +51,7 @@ class ConfigV1:
         self.gpu = '1'
 
         # logging
-        self.save_folder = '/hdd1/2023/2022CVPR_code_publish/results/results_mwr'
+        self.save_folder = 'hdd1/2023/2022CVPR_code_publish/results/results_mwr'
         self.save_folder = f'{self.save_folder}/{self.dataset_name}/{self.model_name}/{self.exp_name}_T{self.tau:.2f}_{get_current_time()}'
         os.makedirs(self.save_folder, exist_ok=True)
         self.log_configs()
@@ -59,18 +59,18 @@ class ConfigV1:
         # Path of imdb-wiki pretrained parameter
         self.imdb_wiki_pretrain = False
         if self.imdb_wiki_pretrain:
-            self.init_model = '/hdd1/AgeEstimation_Pytorch/pretrained/bn_vgg16_multi_pairs_v2/lr_1e-04_fixed_geometric_0.2/Epoch_0035.pth'
+            self.init_model = 'hdd1/AgeEstimation_Pytorch/pretrained/bn_vgg16_multi_pairs_v2/lr_1e-04_fixed_geometric_0.2/Epoch_0035.pth'
 
         # Path of finetuned parameter for evaluation
-        self.load = True
+        self.load = False # TODO: assumed false for now
         if self.load:
-            self.init_model = os.path.join('/hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}.pth')
+            self.init_model = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}.pth')
 
             if self.mwr_sampling:
-                self.sampled_refs = os.path.join('/hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_global_sampled.csv')
-                self.gamma_errors = os.path.join('/hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total_sampled.npy')
+                self.sampled_refs = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_global_sampled.csv')
+                self.gamma_errors = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total_sampled.npy')
             else:
-                self.gamma_errors = os.path.join('/hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total.npy')
+                self.gamma_errors = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total.npy')
 
     def log_configs(self, log_file='log.txt'):
         if os.path.exists(f'{self.save_folder}/{log_file}'):

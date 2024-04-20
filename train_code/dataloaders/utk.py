@@ -21,7 +21,8 @@ imagenet_stats = {'mean': [0.485, 0.456, 0.406],
 class UTKTrain(Dataset):
     def __init__(self, cfg, tau=5, dataset_dir='dataset/UTK/'):
         self.dataset_dir = dataset_dir
-        self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        # self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        self.image_dir = dataset_dir
 
         train_data, _, reg_bound, sampling, sample_rate = data_select(cfg)
         self.df = train_data
@@ -90,7 +91,8 @@ class UTKTest(Dataset):
     def __init__(self, cfg, tau=5, dataset_dir='dataset/UTK/'):
         self.dataset_dir = dataset_dir
         self.tau = tau
-        self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        # self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        self.image_dir = dataset_dir
 
         _, test_data, reg_bound, sampling, sample_rate = data_select(cfg)
         self.df_test = test_data
@@ -125,7 +127,8 @@ class UTKRef(Dataset):
     def __init__(self, cfg, tau=5, dataset_dir='dataset/UTK/'):
         self.dataset_dir = dataset_dir
         self.tau = tau
-        self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        # self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        self.image_dir = dataset_dir
 
         train_data, _, reg_bound, sampling, sample_rate = data_select(cfg)
         self.df_base = train_data
@@ -157,7 +160,8 @@ class UTKRefSampling(Dataset):
     def __init__(self, cfg, tau=5, dataset_dir='dataset/UTK/'):
         self.dataset_dir = dataset_dir
         self.tau = tau
-        self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        # self.image_dir = os.path.join(dataset_dir, cfg.dataset_name)
+        self.image_dir = dataset_dir
 
         train_data, _, reg_bound, sampling, sample_rate = data_select(cfg)
         self.df_base = train_data

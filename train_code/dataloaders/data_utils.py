@@ -43,7 +43,7 @@ def data_select(cfg):
 
     if (cfg.dataset_name == 'clap2015') & (cfg.training_scheme == 'test'):
 
-        total_data = pd.read_excel(os.path.join(cfg.dataset_root, 'clap2015/total_2015.xlsx'))
+        total_data = pd.read_excel('datalist/clap2015/total_2015.xlsx')
 
         train_data = total_data[total_data['database'] != 'test'].reset_index(drop=True)
         test_data = total_data[total_data['database'] == 'test'].reset_index(drop=True)
@@ -61,7 +61,7 @@ def data_select(cfg):
 
     elif (cfg.dataset_name == 'clap2015') & (cfg.training_scheme == 'val'):
 
-        total_data = pd.read_excel(os.path.join(cfg.dataset_root, 'clap2015/total_2015.xlsx'))
+        total_data = pd.read_excel('datalist/clap2015/total_2015.xlsx')
 
         train_data = total_data[total_data['database'] == 'train'].reset_index(drop=True)
         test_data = total_data[total_data['database'] == 'val'].reset_index(drop=True)
@@ -80,8 +80,8 @@ def data_select(cfg):
 
         sep = [' ', ',', ',', ',', ',']
 
-        train_data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/RS_partial/Setting_1_fold%d_train.txt' % cfg.fold), sep=sep[cfg.fold])
-        test_data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/RS_partial/Setting_1_fold%d_test.txt' % cfg.fold), sep=sep[cfg.fold])
+        train_data = pd.read_csv('datalist/morph/RS_partial/Setting_1_fold%d_train.txt' % cfg.fold, sep=sep[cfg.fold])
+        test_data = pd.read_csv('datalist/morph/RS_partial/Setting_1_fold%d_test.txt' % cfg.fold, sep=sep[cfg.fold])
 
         age_min, age_max = train_data['age'].min(), train_data['age'].max()
 
@@ -94,10 +94,10 @@ def data_select(cfg):
 
         total_fold = [0, 1, 2]
         total_fold.pop(cfg.fold)
-        test_data_1 = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/3_Fold_BW/Setting_2_fold%d.txt' % (total_fold[0])), sep=' ')
-        test_data_2 = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/3_Fold_BW/Setting_2_fold%d.txt' % (total_fold[1])), sep=' ')
+        test_data_1 = pd.read_csv('datalist/morph/3_Fold_BW/Setting_2_fold%d.txt' % (total_fold[0]), sep=' ')
+        test_data_2 = pd.read_csv('datalist/morph/3_Fold_BW/Setting_2_fold%d.txt' % (total_fold[1]), sep=' ')
         test_data = pd.concat([test_data_1, test_data_2]).reset_index(drop=True)
-        train_data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/3_Fold_BW/Setting_2_fold%d.txt' % (cfg.fold)), sep=' ')
+        train_data = pd.read_csv('datalist/morph/3_Fold_BW/Setting_2_fold%d.txt' % (cfg.fold), sep=' ')
 
         age_min, age_max = train_data['age'].min(), train_data['age'].max()
 
@@ -108,7 +108,7 @@ def data_select(cfg):
 
     elif (cfg.dataset_name == 'morph') & (cfg.training_scheme == 'SE'):
 
-        data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/SE/Setting_4.txt'), sep='\t')
+        data = pd.read_csv('datalist/morph/SE/Setting_4.txt', sep='\t')
         train_data = data[data['fold'] != cfg.fold].reset_index(drop=True)
         test_data = data[data['fold'] == cfg.fold].reset_index(drop=True)
 
@@ -121,7 +121,7 @@ def data_select(cfg):
 
     elif (cfg.dataset_name == 'morph') & (cfg.training_scheme == 'RS'):
 
-        data = pd.read_csv(os.path.join(cfg.dataset_root, 'morph/RS/Setting_3.txt'), sep='\t')
+        data = pd.read_csv('datalist/morph/RS/Setting_3.txt', sep='\t')
         train_data = data[data['fold'] != cfg.fold].reset_index(drop=True)
         test_data = data[data['fold'] == cfg.fold].reset_index(drop=True)
 
@@ -134,7 +134,7 @@ def data_select(cfg):
 
     elif cfg.dataset_name == 'cacd':
 
-        total_data = pd.read_csv(os.path.join(cfg.dataset_root, 'cacd/CACD.csv'))
+        total_data = pd.read_csv('datalist/cacd/CACD.csv')
         train_data = total_data.loc[total_data['fold'] == cfg.training_scheme].reset_index(drop=True)
         test_data = total_data.loc[total_data['fold'] == 'test'].reset_index(drop=True)
 
@@ -152,8 +152,8 @@ def data_select(cfg):
 
     elif cfg.dataset_name == 'utk':
 
-        train_data = pd.read_csv(os.path.join(cfg.dataset_root, 'utk/UTK_train_coral.csv'))
-        test_data = pd.read_csv(os.path.join(cfg.dataset_root, 'utk/UTK_test_coral.csv'))
+        train_data = pd.read_csv('datalist/utk/UTK_train_coral.csv')
+        test_data = pd.read_csv('datalist/utk/UTK_test_coral.csv')
 
         age_min, age_max = train_data['age'].min(), train_data['age'].max()
 

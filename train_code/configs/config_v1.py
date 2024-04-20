@@ -10,10 +10,10 @@ def write_log(log_file, out_str):
 
 class ConfigV1:
     def __init__(self):
-        
+
         # dataset
         self.dataset_name = 'utk' 
-        self.dataset_root = f'datalist' # TODO: change to wherever downloaded dataset is located
+        self.dataset_root = f'/Users/josh/r/UTKface_inthewild/all' # TODO: change to wherever downloaded dataset is located
         self.training_scheme = 'RS_partial'
         self.fold = 0
 

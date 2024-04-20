@@ -182,7 +182,8 @@ class UTKRefSampling(Dataset):
         sample['ref_impath'] = ref_name
         sample['ref_image_orig'] = np.array(ref_image)
         sample['ref_image'] = ref_image_trans
-
+        
+        print(ref_image_trans.shape)
         return sample
 
     def __len__(self):

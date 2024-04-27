@@ -61,9 +61,10 @@ def extract_features(net, data_loader, data_type):
             sys.stdout.write(f'\rExtract {data_type} Features... [{idx + 1}/{len(data_loader)}]')
 
         image = sample[f'{data_type}_image']
-        image = image.cuda()
+        # image = image.cuda()
 
-        with torch.autocast(device_type='cuda', dtype=torch.float16):
+        # with torch.autocast(device_type='cuda', dtype=torch.float16):
+        with torch.autocast(device_type='cpu', enabled=False):
             f = net('extraction', {'img': image})
 
         f_torch.append(f)

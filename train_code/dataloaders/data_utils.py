@@ -8,6 +8,7 @@ def ImgAugTransform(img):
 
     aug = iaa.Sequential([
         iaa.CropToFixedSize(width=224, height=224),
+        iaa.Resize((224, 224)),
         iaa.Fliplr(0.5)
     ])
 
@@ -18,7 +19,8 @@ def ImgAugTransform(img):
 def ImgAugTransform_Test(img):
 
     aug = iaa.Sequential([
-            iaa.CropToFixedSize(width=224, height=224, position="center")
+            iaa.CropToFixedSize(width=224, height=224, position="center"),
+            iaa.Resize((224, 224)),
         ])
 
     img = np.array(img)
@@ -30,6 +32,7 @@ def ImgAugTransform_Test_Aug(img):
 
     aug = iaa.Sequential([
             iaa.CropToFixedSize(width=224, height=224, position="center"),
+            iaa.Resize((224, 224)),
             iaa.Fliplr(0.5),
             sometimes(iaa.LogContrast(gain=(0.8, 1.2))),
             sometimes(iaa.AdditiveGaussianNoise(scale=(0, 0.05*255))),

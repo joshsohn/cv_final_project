@@ -28,6 +28,15 @@ def test_collate_fn(batch):
     collated_batch['test_image'] = torch.stack(collated_batch['test_image'], dim=0)
     return collated_batch
 
+def train_collate_fn(batch):    
+    keys = batch[0].keys()
+    collated_batch = {key: [d[key] for d in batch] for key in keys}
+    collated_batch['base_min_image'] = torch.stack(collated_batch['base_min_image'], dim=0)
+    collated_batch['base_max_image'] = torch.stack(collated_batch['base_max_image'], dim=0)
+    collated_batch['test_image'] = torch.stack(collated_batch['test_image'], dim=0)
+    collated_batch['label'] = torch.stack([torch.tensor(label, dtype=torch.float32) for label in collated_batch['label']], dim=0)
+    return collated_batch
+
 def main(cfg):
     os.environ["CUDA_VISIBLE_DEVICES"] = cfg.gpu
 
@@ -78,7 +87,7 @@ def main(cfg):
     for epoch in range(0, cfg.epoch):
         net.train()
         train_dataset.get_pair_lists()
-        train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True)
+        train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True, collate_fn=train_collate_fn)
 
         train_loss = train(cfg, net, optimizer, train_loader, epoch)
 
@@ -113,7 +122,7 @@ def train(cfg, net, optimizer, data_loader, epoch):
         base_min_image, base_max_image, test_image = sample['base_min_image'], sample['base_max_image'], sample['test_image']
         labels = sample['label']
 
-        base_min_image, base_max_image, test_image = base_min_image.cuda(), base_max_image.cuda(), test_image.cuda()
+        # base_min_image, base_max_image, test_image = base_min_image.cuda(), base_max_image.cuda(), test_image.cuda()
 
         image_cat = torch.cat([base_min_image, base_max_image, test_image], dim=0)
 
@@ -121,7 +130,8 @@ def train(cfg, net, optimizer, data_loader, epoch):
         base_min_f, base_max_f, test_f = net('extraction', {'img': image_cat}).split(len(base_min_image))
         out = net('comparison', {'base_min_f': base_min_f, 'base_max_f': base_max_f, 'test_f': test_f})
         out = out.squeeze()
-        labels = labels.float().cuda()
+        # labels = labels.float().cuda()
+        labels = labels.float()
 
         loss = torch.nn.MSELoss()(out, labels)
 

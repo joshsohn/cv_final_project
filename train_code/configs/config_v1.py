@@ -28,9 +28,9 @@ class ConfigV1:
 
         #self.image_size = 256
         #self.patch_size = 224
-        self.batch_size = 16
+        self.batch_size = 32
         self.start_iter = 0
-        self.start_eval = 80
+        self.start_eval = 0
 
         self.tau = 0.2
         self.k_neighbors = 5
@@ -44,7 +44,7 @@ class ConfigV1:
         self.scheduler = 'none'
         self.lr = 1e-4
         self.weight_decay = 0
-        self.epoch = 300
+        self.epoch = 50
 
         # misc
         self.num_workers = 0

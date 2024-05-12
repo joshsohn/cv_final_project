@@ -2,6 +2,7 @@ import os
 import sys
 
 import numpy as np
+from tqdm import tqdm 
 
 import torch
 from torch.utils.data import DataLoader
@@ -84,7 +85,7 @@ def main(cfg):
     best_cs = cs
     best_mae_epoch = -1
 
-    for epoch in range(0, cfg.epoch):
+    for epoch in tqdm(range(cfg.epoch), desc='Epoch Progress'):
         net.train()
         train_dataset.get_pair_lists()
         train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True, collate_fn=train_collate_fn)
@@ -122,7 +123,7 @@ def train(cfg, net, optimizer, data_loader, epoch):
         base_min_image, base_max_image, test_image = sample['base_min_image'], sample['base_max_image'], sample['test_image']
         labels = sample['label']
 
-        # base_min_image, base_max_image, test_image = base_min_image.cuda(), base_max_image.cuda(), test_image.cuda()
+        base_min_image, base_max_image, test_image = base_min_image.cuda(), base_max_image.cuda(), test_image.cuda()
 
         image_cat = torch.cat([base_min_image, base_max_image, test_image], dim=0)
 
@@ -130,8 +131,8 @@ def train(cfg, net, optimizer, data_loader, epoch):
         base_min_f, base_max_f, test_f = net('extraction', {'img': image_cat}).split(len(base_min_image))
         out = net('comparison', {'base_min_f': base_min_f, 'base_max_f': base_max_f, 'test_f': test_f})
         out = out.squeeze()
-        # labels = labels.float().cuda()
-        labels = labels.float()
+        labels = labels.float().cuda()
+        # labels = labels.float()
 
         loss = torch.nn.MSELoss()(out, labels)
 

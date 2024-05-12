@@ -13,7 +13,7 @@ class ConfigV1:
 
         # dataset
         self.dataset_name = 'utk' 
-        self.dataset_root = f'/Users/josh/Downloads/UTKFace' # TODO: change to wherever downloaded dataset is located
+        self.dataset_root = f'/home/raphaelpeabody/Downloads/UTKFace' # TODO: change to wherever downloaded dataset is located
         self.training_scheme = 'RS_partial'
         self.fold = 0
 
@@ -28,7 +28,7 @@ class ConfigV1:
 
         #self.image_size = 256
         #self.patch_size = 224
-        self.batch_size = 32
+        self.batch_size = 16
         self.start_iter = 0
         self.start_eval = 0
 
@@ -48,7 +48,7 @@ class ConfigV1:
 
         # misc
         self.num_workers = 0
-        self.gpu = '1'
+        self.gpu = '0'
 
         # logging
         self.save_folder = 'hdd1/2023/2022CVPR_code_publish/results/results_mwr'

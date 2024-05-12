@@ -14,8 +14,10 @@ def global_regression(arg, train_data, test_data, sampling=False, sample_rate=1)
     model = models.create_model(arg, arg.backbone)
     model.to(device)
 
-    initial_model = os.path.join(arg.ckpt_dir, 'global', '%s/%s/fold%d/%s_%s.pth'%
-                                 (str(arg.dataset).upper(), arg.experiment_setting, arg.fold, arg.dataset, arg.experiment_setting))
+    # initial_model = os.path.join(arg.ckpt_dir, 'global', '%s/%s/fold%d/%s_%s.pth'%
+    #                              (str(arg.dataset).upper(), arg.experiment_setting, arg.fold, arg.dataset, arg.experiment_setting))
+    model_path = 'Back_vgg16bn_M_MWR_T0.20_2024-05-09 00:38:15/mae_Epoch_4_MAE_5.9005_CS_0.5543.pth'
+    initial_model = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', model_path)
     print(initial_model)
 
     ### Load network parameters ###
@@ -31,8 +33,10 @@ def global_regression(arg, train_data, test_data, sampling=False, sample_rate=1)
     ### Designate save path ###
     if sampling is True:
 
-        train_data_sampled_path = os.path.join(arg.ckpt_dir, 'global', '%s/%s/fold%d/%s_%s_global_sampled.csv'%
-                                     (str(arg.dataset).upper(), arg.experiment_setting, arg.fold, arg.dataset, arg.experiment_setting))
+        # train_data_sampled_path = os.path.join(arg.ckpt_dir, 'global', '%s/%s/fold%d/%s_%s_global_sampled.csv'%
+        #                              (str(arg.dataset).upper(), arg.experiment_setting, arg.fold, arg.dataset, arg.experiment_setting))
+
+        train_data_sampled_path = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', 'test.csv')
 
         if os.path.exists(train_data_sampled_path) is False:
 

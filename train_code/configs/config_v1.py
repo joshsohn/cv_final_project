@@ -10,12 +10,14 @@ def write_log(log_file, out_str):
 
 class ConfigV1:
     def __init__(self):
-
         # dataset
         self.dataset_name = 'utk' 
-        self.dataset_root = f'/home/raphaelpeabody/Downloads/UTKFace' # TODO: change to wherever downloaded dataset is located
+        self.dataset_root = f'/Users/josh/Downloads/UTKFace' # TODO: change to wherever downloaded dataset is located
+        self.model_path = 'Back_vgg16bn_M_MWR_T0.20_2024-05-09 00:38:15/mae_Epoch_4_MAE_5.9005_CS_0.5543.pth'
         self.training_scheme = 'RS_partial'
         self.fold = 0
+
+        self.init_model = os.path.join(os.getcwd(), '../hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', self.model_path)
 
         # network
         self.backbone = 'vgg16bn'
@@ -61,16 +63,16 @@ class ConfigV1:
         if self.imdb_wiki_pretrain:
             self.init_model = 'hdd1/AgeEstimation_Pytorch/pretrained/bn_vgg16_multi_pairs_v2/lr_1e-04_fixed_geometric_0.2/Epoch_0035.pth'
 
-        # Path of finetuned parameter for evaluation
-        self.load = False # TODO: assumed false for now
-        if self.load:
-            self.init_model = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}.pth')
+        # # Path of finetuned parameter for evaluation
+        # self.load = True # TODO: assumed false for now
+        # if self.load:
+        #     self.init_model = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}.pth')
 
-            if self.mwr_sampling:
-                self.sampled_refs = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_global_sampled.csv')
-                self.gamma_errors = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total_sampled.npy')
-            else:
-                self.gamma_errors = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total.npy')
+        #     if self.mwr_sampling:
+        #         self.sampled_refs = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_global_sampled.csv')
+        #         self.gamma_errors = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total_sampled.npy')
+        #     else:
+        #         self.gamma_errors = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}_loss_total.npy')
 
     def log_configs(self, log_file='log.txt'):
         if os.path.exists(f'{self.save_folder}/{log_file}'):

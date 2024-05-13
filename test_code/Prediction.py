@@ -16,7 +16,7 @@ def global_regression(arg, train_data, test_data, sampling=False, sample_rate=1)
 
     # initial_model = os.path.join(arg.ckpt_dir, 'global', '%s/%s/fold%d/%s_%s.pth'%
     #                              (str(arg.dataset).upper(), arg.experiment_setting, arg.fold, arg.dataset, arg.experiment_setting))
-    model_path = 'Back_vgg16bn_M_MWR_T0.20_2024-05-09 00:38:15/mae_Epoch_4_MAE_5.9005_CS_0.5543.pth'
+    model_path = 'Back_vgg16bn_M_MWR_T0.20_2024-05-09 00:38:15/mae_Epoch_4_MAE_5.9005_CS_0.5543.pth' # CHANGE TO MODEL PATH
     initial_model = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', model_path)
     print(initial_model)
 
@@ -36,7 +36,7 @@ def global_regression(arg, train_data, test_data, sampling=False, sample_rate=1)
         # train_data_sampled_path = os.path.join(arg.ckpt_dir, 'global', '%s/%s/fold%d/%s_%s_global_sampled.csv'%
         #                              (str(arg.dataset).upper(), arg.experiment_setting, arg.fold, arg.dataset, arg.experiment_setting))
 
-        train_data_sampled_path = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', 'test.csv')
+        train_data_sampled_path = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', 'test_data.csv')
 
         if os.path.exists(train_data_sampled_path) is False:
 
@@ -84,11 +84,18 @@ def global_regression(arg, train_data, test_data, sampling=False, sample_rate=1)
         save_results_path = os.path.join(arg.ckpt_dir, 'global', '%s/%s/fold%d/%s_%s_global_top1_results.txt' % (
         str(arg.dataset).upper(), arg.experiment_setting, arg.fold, arg.dataset, arg.experiment_setting))
 
+    save_path = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', 'test.npy')
+    save_results_path = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', 'test_results.txt')
+
     ### Get features ###
     features = feature_extraction_global_regression(arg, train_data, test_data, model, device)
 
+    print('features done')
+
     ### Make initial prediction ###
     init_pred = initial_prediction(train_data, test_data, features, 5)
+
+    print('initial predictions done')
 
     ### Get regression error ###
     if os.path.isfile(save_path) == True:
@@ -99,11 +106,17 @@ def global_regression(arg, train_data, test_data, sampling=False, sample_rate=1)
         np.save(save_path, loss_total)
         print('Best pair indices saved', save_path)
 
+    print('best pairs done')
+
     ### Get best reference pairs ###
     refer_idx, refer_idx_pair = select_reference_global_regression(train_data, pair_idx, np.array(loss_total), limit=1)
 
+    print('references done')
+
     ### MWR ###
     pred = MWR_global_regression(arg, train_data, test_data, features, refer_idx, refer_idx_pair, init_pred, model, device)
+
+    print('predictions done')
 
     if os.path.isfile(save_results_path) == False:
         np.savetxt(save_results_path, np.array(pred).reshape(-1, 1))

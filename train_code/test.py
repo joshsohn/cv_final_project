@@ -9,11 +9,25 @@ from torch.utils.data import DataLoader
 from configs.config_v1 import ConfigV1 as Config
 from network.network_utils import build_model
 from network.optimizer_utils import get_optimizer, get_scheduler
-from dataloaders import morph
+from dataloaders import morph, utk
 from utils.util import load_model, extract_features, find_kNN, get_absolute_score, select_pair_geometric, get_age_bounds, select_reference_global_regression, \
     get_best_pairs_global_regression, get_results
 
+def ref_collate_fn(batch):
+    # Convert list of dictionaries to dictionary of lists
+    keys = batch[0].keys()
+    collated_batch = {key: [d[key] for d in batch] for key in keys}
+    # Stack images for tensor processing
+    collated_batch['ref_image'] = torch.stack(collated_batch['ref_image'], dim=0)
+    return collated_batch
 
+def test_collate_fn(batch):
+    # Convert list of dictionaries to dictionary of lists
+    keys = batch[0].keys()
+    collated_batch = {key: [d[key] for d in batch] for key in keys}
+    # Stack images for tensor processing
+    collated_batch['test_image'] = torch.stack(collated_batch['test_image'], dim=0)
+    return collated_batch
 
 def main(cfg):
     os.environ["CUDA_VISIBLE_DEVICES"] = cfg.gpu
@@ -33,6 +47,15 @@ def main(cfg):
 
         test_ref_loader = DataLoader(test_ref_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True)
         test_loader = DataLoader(test_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True)
+    
+    elif cfg.dataset_name == 'utk':
+
+        train_dataset = utk.UTKTrain(cfg=cfg, tau=cfg.tau, dataset_dir=cfg.dataset_root)
+        test_ref_dataset = utk.UTKRefSampling(cfg=cfg, tau=cfg.tau, dataset_dir=cfg.dataset_root)
+        test_dataset = utk.UTKTest(cfg=cfg, dataset_dir=cfg.dataset_root)
+
+        test_ref_loader = DataLoader(test_ref_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True, collate_fn=ref_collate_fn)
+        test_loader = DataLoader(test_dataset, batch_size=cfg.batch_size, num_workers=cfg.num_workers, shuffle=False, pin_memory=True, collate_fn=test_collate_fn)
 
     else:
         raise ValueError(f'Undefined database ({cfg.dataset_name}) has been given')

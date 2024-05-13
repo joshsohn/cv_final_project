@@ -164,6 +164,8 @@ def get_gt(age_y1, age_y2, age_x):
 
 def get_best_pairs_global_regression(arg, train_data, test_data, features, model, device, load):
 
+    print('get_best_pairs_global_regression')
+
     data_age_max = int(train_data['age'].max())
     data_age = train_data['age'].to_numpy().astype('int')
     data_test_age = test_data['age'].to_numpy().astype('int')
@@ -183,7 +185,7 @@ def get_best_pairs_global_regression(arg, train_data, test_data, features, model
         index_test = np.where((data_test_age >= (age_y1 - 6)) & (data_test_age <= (age_y2 + 6)))[0]
 
         loss_tmp = []
-        batch_size = 5000
+        batch_size = 32
 
         gt_total = []
 
@@ -208,7 +210,9 @@ def get_best_pairs_global_regression(arg, train_data, test_data, features, model
 
                 for k in range(0, len(feat_y1), batch_size):
                     batch = min(batch_size, len(feat_y1))
+                    print('batch', batch)
                     outputs = model('test', x_1_1=feat_y1[k:k+batch], x_1_2=feat_y2[k:k+batch], x_2=feat_x[k:k+batch])
+                    print('outputs_shape', outputs.shape)
                     loss_tmp.extend(outputs.squeeze().cpu().detach().numpy().reshape(-1))
 
             outputs = np.array(loss_tmp)
@@ -342,6 +346,7 @@ def MWR_global_regression(arg, train_data, test_data, features, refer_idx, refer
                 tau = abs(mean - np.log(lb_age))
 
                 refined_age = np.mean([np.exp(outputs[k] * tau[k] + mean[k]) for k in range(len(outputs))])
+                print(refined_age)
 
                 if (max_iter == iteration) or (int(refined_age + 0.5) == age):
                     age = int(refined_age + 0.5)

@@ -17,8 +17,6 @@ class ConfigV1:
         self.training_scheme = 'RS_partial'
         self.fold = 0
 
-        self.init_model = os.path.join(os.getcwd(), '../hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', self.model_path)
-
         # network
         self.backbone = 'vgg16bn'
         self.model_name = 'MWR'
@@ -64,8 +62,10 @@ class ConfigV1:
             self.init_model = 'hdd1/AgeEstimation_Pytorch/pretrained/bn_vgg16_multi_pairs_v2/lr_1e-04_fixed_geometric_0.2/Epoch_0035.pth'
 
         # # Path of finetuned parameter for evaluation
-        # self.load = True # TODO: assumed false for now
-        # if self.load:
+        self.load = True # TODO: assumed false for now
+        if self.load:
+            self.init_model = os.path.join(os.getcwd(), 'hdd1/2023/2022CVPR_code_publish/results/results_mwr/utk/MWR', self.model_path)
+            
         #     self.init_model = os.path.join('hdd1/2023/2022CVPR_code_publish/ckpt/global', self.dataset_name, self.training_scheme, f'fold{self.fold}', f'{self.dataset_name}_{self.training_scheme.lower()}.pth')
 
         #     if self.mwr_sampling:
